@@ -2,7 +2,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Environment Variables
+
+To set up your environment variables:
+
+1. Rename the `.env.example` file to `.env`
+2. Update the variables in the `.env` file with your own values
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -16,21 +23,44 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In the project directory, you can run:
 
-## Learn More
+### `npm run dev`
 
-To learn more about Next.js, take a look at the following resources:
+Runs the development server using Turbopack.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### `npm run build`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Builds the application for production usage.
 
-## Deploy on Vercel
+### `npm run start`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Starts a production server with the built application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `npm run lint`
+
+Runs ESLint to check for code quality and style issues.
+
+### `npm run test`
+
+Executes Jest tests for the application.
+
+### `npm run generate:types`
+
+Generates TypeScript types from GraphQL schema using GraphQL Code Generator.
+
+## Folder structure
+
+Each directory serves a specific purpose:
+
+- `assets/`: Contains static files like fonts and images
+- `components/`: Houses reusable UI components, each in its own directory with tests
+- `features/`: Contains feature-based modules (like the lease calculator) with their components, types, and logic
+- `pages/`: Next.js pages and routing
+- `services/`: API-related code, GraphQL queries, and external service integrations
+- `types/`: Global TypeScript type definitions and generated GraphQL types
+
+The project follows a feature-based architecture where related code is grouped by business domain (like the lease calculator) rather than technical concerns. This makes it easier to maintain and scale the application as new features are added.
