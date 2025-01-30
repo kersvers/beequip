@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes, useMemo, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import Button from "@/components/Button";
 import { LeaseBoundaries } from "@/types/lease";
 
 import {
-  LeaseCalculatorFormSchema,
+  getLeaseCalculatorFormSchema,
   LeaseCalculatorFormSchemaType,
 } from "../../schemas";
 import { LeaseCalculationInput } from "../../types";
@@ -22,23 +22,29 @@ export const LeaseCalculatorForm = ({
   leaseBoundaries,
   ...props
 }: Props) => {
+  const FormSchema = useMemo(
+    () => getLeaseCalculatorFormSchema(leaseBoundaries),
+    [leaseBoundaries]
+  );
   const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LeaseCalculatorFormSchemaType>({
-    resolver: zodResolver(LeaseCalculatorFormSchema),
+    resolver: zodResolver(FormSchema),
   });
 
   const onSubmit: SubmitHandler<LeaseCalculatorFormSchemaType> = async (
     data
   ) => {
+    setError("");
     setPending(true);
     try {
       await fetchLeaseCalculation(data);
-    } catch (error) {
-      console.log(error);
+    } catch {
+      setError("Oops! Er ging iets mis, probeer het nogmaals");
     }
     setPending(false);
   };
@@ -59,14 +65,14 @@ export const LeaseCalculatorForm = ({
           placeholder="Bijvoorbeeld DAF"
           error={errors.brand?.message}
           className="mb-5"
-          {...register("brand")}
+          {...register("brand", {})}
         />
         <LeaseCalculatorFormField
           label="Type"
           placeholder="Bijvoorbeeld XF480"
           error={errors.type?.message}
           className="mb-5"
-          {...register("type")}
+          {...register("type", {})}
         />
       </div>
       <div className="flex gap-6">
@@ -77,8 +83,6 @@ export const LeaseCalculatorForm = ({
           type="number"
           helperText={`Tussen ${leaseBoundaries.objectYear.min} en ${leaseBoundaries.objectYear.max}`}
           className="mb-5"
-          min={leaseBoundaries.objectYear.min}
-          max={leaseBoundaries.objectYear.max}
           {...register("year", {
             valueAsNumber: true,
           })}
@@ -92,8 +96,6 @@ export const LeaseCalculatorForm = ({
             leaseBoundaries.purchasePrice.min
           )} en ${formatPrice(leaseBoundaries.purchasePrice.max)}`}
           className="mb-5"
-          min={leaseBoundaries.purchasePrice.min}
-          max={leaseBoundaries.purchasePrice.max}
           {...register("purchasePrice", {
             valueAsNumber: true,
           })}
@@ -102,6 +104,7 @@ export const LeaseCalculatorForm = ({
       <Button type="submit" disabled={pending}>
         Berekening opslaan
       </Button>
+      {error && <p className="mt-4 text-red-500 text-xs">{error}</p>}
     </form>
   );
 };

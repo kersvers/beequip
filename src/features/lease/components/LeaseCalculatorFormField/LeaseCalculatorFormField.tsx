@@ -1,19 +1,18 @@
 import classNames from "classnames";
 import { InputHTMLAttributes, forwardRef } from "react";
 import { UseFormRegister } from "react-hook-form";
-import type * as z from "zod";
 
 import InputField from "@/components/InputField";
 import Label from "@/components/Label";
 
-import { LeaseCalculatorFormSchema } from "../../schemas";
+import { LeaseCalculatorFormSchemaType } from "../../schemas";
 
 type FormFieldProps = {
   label?: string;
   helperText?: string;
   error?: string;
 } & InputHTMLAttributes<HTMLInputElement> &
-  ReturnType<UseFormRegister<z.infer<typeof LeaseCalculatorFormSchema>>>;
+  ReturnType<UseFormRegister<LeaseCalculatorFormSchemaType>>;
 
 export const LeaseCalculatorFormField = forwardRef<
   HTMLInputElement,
@@ -24,7 +23,8 @@ export const LeaseCalculatorFormField = forwardRef<
       <Label text={label}>
         <InputField ref={ref} hasError={error !== undefined} {...props} />
       </Label>
-      {helperText && (
+      {error && <span className=" text-red-500 text-xs">{error}</span>}
+      {helperText && !error && (
         <span className=" text-gray-100 text-xs">{helperText}</span>
       )}
     </div>
