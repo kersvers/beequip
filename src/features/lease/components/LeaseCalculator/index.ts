@@ -1,0 +1,1 @@
+export { LeaseCalculator as default } from './LeaseCalculator';

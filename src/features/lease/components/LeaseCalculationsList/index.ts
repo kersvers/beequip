@@ -1,0 +1,1 @@
+export { LeaseCalculationsList as default } from './LeaseCalculationsList';
